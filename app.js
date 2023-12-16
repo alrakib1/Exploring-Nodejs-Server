@@ -1,14 +1,7 @@
 const http = require("http");
 
-const server = http.createServer((req, res) => {
-  console.log(req.url, req.method, req.headers);
-  //   process.exit();
-  res.setHeader("content-Type", "text/html");
-  res.write("<html>");
-  res.write("<head><title>My First Node Server</title></head>");
-  res.write("<body><h1>Hello from my Node js server!</h1></body>");
-  res.write("</html>");
-  res.end();
-});
+const routes = require('./routes')
 
-server.listen(4000);
+const server = http.createServer(routes);
+
+server.listen(4000, console.log(`server running on port:${4000}`));

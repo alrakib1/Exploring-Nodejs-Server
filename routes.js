@@ -1,9 +1,8 @@
-const http = require("http");
 const fs = require("fs");
 
-const server = http.createServer((req, res) => {
-  const url = req.url;
-  const method = req.method;
+const requestHandler = (req, res) => {
+    const url = req.url;
+    const method = req.method;
   if (url === "/") {
     res.write("<html>");
     res.write("<head><title>Enter Message</title></head>");
@@ -20,18 +19,16 @@ const server = http.createServer((req, res) => {
 
       body.push(chunk);
     });
-   return req.on("end", () => {
+    return req.on("end", () => {
       const parsedBody = Buffer.concat(body).toString();
       console.log(parsedBody);
       const message = parsedBody.split("=")[1];
-      fs.writeFile("message.txt", message,(err)=>{
-
+      fs.writeFile("message.txt", message, (err) => {
         res.statusCode = 302;
         res.setHeader("Location", "/");
         return res.end();
       });
     });
-
   }
 
   res.setHeader("content-Type", "text/html");
@@ -40,6 +37,6 @@ const server = http.createServer((req, res) => {
   res.write("<body><h1>Hello from my Node js server!</h1></body>");
   res.write("</html>");
   res.end();
-});
+};
 
-server.listen(4000, console.log(`server running on port:${4000}`));
+exports = requestHandler;
