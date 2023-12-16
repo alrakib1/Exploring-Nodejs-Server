@@ -16,7 +16,6 @@ const requestHandler = (req, res) => {
     const body = [];
     req.on("data", (chunk) => {
       console.log("Chunks", chunk);
-
       body.push(chunk);
     });
     return req.on("end", () => {
@@ -39,4 +38,4 @@ const requestHandler = (req, res) => {
   res.end();
 };
 
-exports = requestHandler;
+module.exports = requestHandler;
