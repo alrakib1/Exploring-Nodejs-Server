@@ -14,10 +14,24 @@ const server = http.createServer((req, res) => {
     return res.end();
   }
   if (url === "/message" && method === "POST") {
-    fs.writeFileSync("message.txt", "DUMMY");
-    res.statusCode = 302;
-    res.setHeader('Location','/');
-    res.end();
+    const body = [];
+    req.on("data", (chunk) => {
+      console.log("Chunks", chunk);
+
+      body.push(chunk);
+    });
+   return req.on("end", () => {
+      const parsedBody = Buffer.concat(body).toString();
+      console.log(parsedBody);
+      const message = parsedBody.split("=")[1];
+      fs.writeFile("message.txt", message,(err)=>{
+
+        res.statusCode = 302;
+        res.setHeader("Location", "/");
+        return res.end();
+      });
+    });
+
   }
 
   res.setHeader("content-Type", "text/html");
@@ -28,4 +42,4 @@ const server = http.createServer((req, res) => {
   res.end();
 });
 
-server.listen(4000);
+server.listen(4000, console.log(`server running on port:${4000}`));
